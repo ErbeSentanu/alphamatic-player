@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALPHAMATIC PLAYER</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 30px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: radial-gradient(circle at top, #174c9b, #06122f 75%);
+}
+
+.player {
+  width: 100%;
+  max-width: 560px;
+  padding: 32px 24px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 28px;
+  background: linear-gradient(145deg, #103e91, #1768b7);
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+header {
+  text-align: center;
+}
+
+h1 {
+  letter-spacing: 5px;
+  font-size: 30px;
+  margin: 0 0 12px;
+}
+
+.tagline {
+  color: #b8f5ff;
+  font-size: 16px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,.7);
+  margin: 24px 0;
+}
+
+h2 {
+  font-size: 23px;
+}
+
+.intro {
+  line-height: 1.6;
+  color: #e5efff;
+}
+
+.track {
+  margin: 18px 0;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.13);
+}
+
+.track h3 {
+  margin: 0 0 12px;
+  font-size: 17px;
+}
+
+audio {
+  width: 100%;
+  height: 42px;
+}
+
+.note {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-top: 28px;
+  color: #d9f5ff;
+}
+audio:focus {
+  outline: 2px solid #38bdf8;
+  outline-offset: 4px;
+}
+
+audio {
+  border-radius: 10px;
+}
+/* RESPONSIVE UNTUK HP */
+@media (max-width: 768px) {
+  .player {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  #nowPlaying {
+    text-align: center;
+    width: 100%;
+    margin: 20px auto;
+    font-size: 16px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+<div class="player">
+
+<header>
+  <h1>ALPHAMATIC</h1>
+  <div class="tagline">Find Your Inner Harmony</div>
+</header>
+
+<hr>
+
+<h2>Core Meditation</h2>
+<p class="intro">
+Pilih audio, kenakan headphone, dan nikmati ruang tenangmu.
+</p>
+
+<div class="track">
+  <h3>01 · Zero Point</h3>
+  <audio controls preload="metadata">
+    <source src="audio/1%20Zero%20Point.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<div class="track">
+  <h3>02 · Ilir Ilir</h3>
+  <audio controls preload="metadata">
+    <source src="audio/2%20Ilir%20Ilir.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<div class="track">
+  <h3>03 · Infinite Joy</h3>
+  <audio controls preload="metadata">
+    <source src="audio/3%20Infinite%20Joy.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<div class="track">
+  <h3>04 · Radiance</h3>
+  <audio controls preload="metadata">
+    <source src="audio/4%20Radiance.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<div class="track">
+  <h3>05 · Moving Heart</h3>
+  <audio controls preload="metadata">
+    <source src="audio/5%20Moving%20Heart.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<div class="track">
+  <h3>06 · Diving Heart</h3>
+  <audio controls preload="metadata">
+    <source src="audio/6%20Diving%20Heart.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<div class="note">
+ALPHAMATIC PLAYER · KATAHATI INSTITUTE
+</div>
+
+<div id="nowPlaying" style="text-align:center; color:#38bdf8; margin-top:20px; font-weight:bold;">
+  NOW PLAYING: —
+</div>
+
+<script>
+const semuaAudio = document.querySelectorAll("audio");
+
+const nowPlaying = document.getElementById("nowPlaying");
+semuaAudio.forEach(function(audio) {
+  audio.addEventListener("play", function() {
+    nowPlaying.textContent = "NOW PLAYING: " +
+audio.closest(".track").querySelector("h3").textContent;
+    semuaAudio.forEach(function(lain) {
+      if (lain !== audio) {
+        lain.pause();
+      }
+    });
+  });
+});
+function previousTrack() {
+  const audios = document.querySelectorAll(".track audio");
+  let currentIndex = -1;
+
+  audios.forEach(function(audio, index) {
+    if (!audio.paused) {
+      currentIndex = index;
+    }
+  });
+
+  if (currentIndex > 0) {
+    audios[currentIndex - 1].play();
+  }
+}
+function nextTrack() {
+  const audios = document.querySelectorAll(".track audio");
+  let currentIndex = -1;
+
+  audios.forEach(function(audio, index) {
+    if (!audio.paused) {
+      currentIndex = index;
+    }
+  });
+
+  if (currentIndex >= 0 && currentIndex < audios.length - 1) {
+    audios[currentIndex + 1].play();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  const volumeControl = document.getElementById("volumeControl");
+  if (!volumeControl) return;
+
+  volumeControl.addEventListener("input", function() {
+    document.querySelectorAll("audio").forEach(function(audio) {
+      audio.volume = Number(volumeControl.value);
+      document.getElementById("volumeValue").textContent = Math.round(Number(volumeControl.value) * 100) + "%";
+    });
+  });
+});
+function toggleMute() {
+  const audios = document.querySelectorAll("audio");
+  const muteButton = document.getElementById("muteButton");
+  const muteNow = audios.length > 0 && !audios[0].muted;
+
+  audios.forEach(function(audio) {
+    audio.muted = muteNow;
+  });
+
+  muteButton.textContent = muteNow ? "🔇 UNMUTE" : "🔊 MUTE";
+}
+let repeatEnabled = false;
+
+function toggleRepeat() {
+  repeatEnabled = !repeatEnabled;
+
+  document.querySelectorAll("audio").forEach(function(audio) {
+    audio.loop = repeatEnabled;
+  });
+
+  document.getElementById("repeatButton").textContent =
+    repeatEnabled ? "🔁 REPEAT: ON" : "🔁 REPEAT: OFF";
+}
+
+function shuffleTrack() {
+  const audios = Array.from(document.querySelectorAll(".track audio"));
+  if (audios.length === 0) return;
+
+  const currentIndex = audios.findIndex(audio => !audio.paused);
+  let choices = audios
+    .map((audio, index) => index)
+    .filter(index => index !== currentIndex);
+
+  if (choices.length === 0) choices = audios.map((audio, index) => index);
+
+  const randomIndex = choices[Math.floor(Math.random() * choices.length)];
+
+  audios.forEach(audio => audio.pause());
+  audios[randomIndex].currentTime = 0;
+  audios[randomIndex].play();
+}
+function pauseAll() {
+  document.querySelectorAll("audio").forEach(function(audio) {
+    audio.pause();
+  });
+}
+function restartAll() {
+let repeatEnabled = false;
+
+function toggleRepeat() {
+  repeatEnabled = !repeatEnabled;
+
+  document.querySelectorAll("audio").forEach(function(audio) {
+    audio.loop = repeatEnabled;
+  });
+
+  const repeatButton = document.getElementById("repeatButton");
+  repeatButton.textContent = repeatEnabled
+    ? "🔁 REPEAT: ON"
+    : "🔁 REPEAT: OFF";
+}
+  document.querySelectorAll("audio").forEach(function(audio) {
+    audio.pause();
+    audio.currentTime = 0;
+  });
+
+  nowPlaying.textContent = "NOW PLAYING: —";
+}
+document.querySelectorAll("audio").forEach(function(audio, index, audios) {
+  audio.addEventListener("ended", function() {
+    const nextAudio = audios[index + 1];
+
+    if (nextAudio) {
+      nextAudio.play();
+    } else {
+  nowPlaying.textContent = "NOW PLAYING: —";
+}
+
+  });
+});</script>
+
+
+
+
+<button onclick="previousTrack()">⏮ PREVIOUS TRACK</button>
+<button onclick="nextTrack()">NEXT TRACK ⏭</button>
+<button onclick="restartAll()">↺ RESTART ALL</button>
+<button id="repeatButton" onclick="toggleRepeat()">🔁 REPEAT: OFF</button>
+<button onclick="shuffleTrack()">🔀 SHUFFLE TRACK</button>
+<button type="button" onclick="pauseAll()">⏸ PAUSE ALL</button>
+<button id="muteButton" onclick="toggleMute()">🔊 MUTE</button>
+<div style="margin: 20px 0; color: white;">
+  <label for="volumeControl">🔊 VOLUME</label>
+  <input
+    type="range"
+    id="volumeControl"
+    min="0"
+    max="1"
+    step="0.01"
+    value="1"
+  >
+<span id="volumeValue">100%</span>
+</div>
+</body>
+</html>
